@@ -1,7 +1,20 @@
 from random import choice
 import pygame
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, GRID_SIZE, DIR_MOVE
-from config import APPLE_COLOR, SNAKE_COLOR, BORDER_COLOR, BOARD_BACKGROUND_COLOR, SPEED
+
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 800
+GRID_SIZE = 20
+GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
+GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+UP = (0, -1)
+DOWN = (0, 1)
+LEFT = (-1, 0)
+RIGHT = (1, 0)
+BOARD_BACKGROUND_COLOR = (0, 0, 0)
+BORDER_COLOR = (93, 216, 228)
+APPLE_COLOR = (255, 0, 0)
+SNAKE_COLOR = (0, 255, 0)
+SPEED = 7
+
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 pygame.display.set_caption('Змейка')
@@ -50,7 +63,7 @@ class Snake(GameObject):
     """Класс описывающий змейку и её поведение"""
 
     positions = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
-    direction = DIR_MOVE['RIGHT']
+    direction = RIGHT
     next_direction = None
 
     def __init__(self) -> None:
@@ -106,13 +119,13 @@ class Snake(GameObject):
     def get_new_head_position(self) -> tuple[int, int]:
         """Возвращает новые координаты головы змейки."""
         x_head, y_head = self.get_head_position()
-        if self.direction == DIR_MOVE['RIGHT']:
+        if self.direction == RIGHT:
             return x_head + 20, y_head
-        if self.direction == DIR_MOVE['LEFT']:
+        if self.direction == LEFT:
             return x_head - 20, y_head
-        if self.direction == DIR_MOVE['UP']:
+        if self.direction == UP:
             return x_head, y_head - 20
-        if self.direction == DIR_MOVE['DOWN']:
+        if self.direction == DOWN:
             return x_head, y_head + 20
 
     def get_head_position(self) -> tuple[int, int]:
@@ -132,7 +145,7 @@ class Snake(GameObject):
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
         self.length = 1
         self.positions = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
-        self.direction = DIR_MOVE['RIGHT']
+        self.direction = RIGHT
         self.next_direction = None
 
 
@@ -143,14 +156,14 @@ def handle_keys(game_object) -> None:
             pygame.quit()
             raise SystemExit
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and game_object.direction != DIR_MOVE['DOWN']:
-                game_object.next_direction = DIR_MOVE['UP']
-            elif event.key == pygame.K_DOWN and game_object.direction != DIR_MOVE['UP']:
-                game_object.next_direction = DIR_MOVE['DOWN']
-            elif event.key == pygame.K_LEFT and game_object.direction != DIR_MOVE['RIGHT']:
-                game_object.next_direction = DIR_MOVE['LEFT']
-            elif event.key == pygame.K_RIGHT and game_object.direction != DIR_MOVE['LEFT']:
-                game_object.next_direction = DIR_MOVE['RIGHT']
+            if event.key == pygame.K_UP and game_object.direction != DOWN:
+                game_object.next_direction = UP
+            elif event.key == pygame.K_DOWN and game_object.direction != UP:
+                game_object.next_direction = DOWN
+            elif event.key == pygame.K_LEFT and game_object.direction != RIGHT:
+                game_object.next_direction = LEFT
+            elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
+                game_object.next_direction = RIGHT
 
 
 def main():
